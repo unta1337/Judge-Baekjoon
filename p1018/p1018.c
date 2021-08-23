@@ -8,6 +8,43 @@
 #include <stdlib.h>
 #include <string.h>
 
+char** createStringArray(int rows, int cols);
+void deleteStringArray(char** stringArray, int rows, int cols);
+
+int countTargetInRange(char* array, int start, int length, char target);
+int countTargetInSquare(char** array, int row, int col, int rows, int cols, char target, int place);
+int getLeastChangeInSquare(char** array, int row, int col, int rows, int cols);
+
+int arrayMin(int* array, int size);
+
+int main(void)
+{
+	int rows, cols;
+	scanf("%d %d", &rows, &cols);
+
+	char** checkerboard = createStringArray(rows, cols);
+	for (int i = 0; i < rows; i++)
+		scanf("%s", checkerboard[i]);
+
+	int countSize = (rows - 7) * (cols - 7);
+	int* changeCounts = (int*)calloc(countSize, sizeof(int));
+	int changeIndex = 0;
+
+	for (int i = 0; i < rows - 7; i++)
+	{
+		for (int j = 0; j < cols - 7; j++)
+			changeCounts[changeIndex++] = getLeastChangeInSquare(checkerboard, i, j, 8, 8);
+	}
+
+	int leastChange = arrayMin(changeCounts, countSize);
+	printf("%d\n", leastChange);
+
+	deleteStringArray(checkerboard, rows, cols);
+	free(changeCounts);
+
+	return 0;
+}
+
 char** createStringArray(int rows, int cols)
 {
 	char** stringArray = (char**)malloc(rows * sizeof(char*));
@@ -71,32 +108,4 @@ int arrayMin(int* array, int size)
 	}
 
 	return min;
-}
-
-int main(void)
-{
-	int rows, cols;
-	scanf("%d %d", &rows, &cols);
-
-	char** checkerboard = createStringArray(rows, cols);
-	for (int i = 0; i < rows; i++)
-		scanf("%s", checkerboard[i]);
-
-	int countSize = (rows - 7) * (cols - 7);
-	int* changeCounts = (int*)calloc(countSize, sizeof(int));
-	int changeIndex = 0;
-
-	for (int i = 0; i < rows - 7; i++)
-	{
-		for (int j = 0; j < cols - 7; j++)
-			changeCounts[changeIndex++] = getLeastChangeInSquare(checkerboard, i, j, 8, 8);
-	}
-
-	int leastChange = arrayMin(changeCounts, countSize);
-	printf("%d\n", leastChange);
-
-	deleteStringArray(checkerboard, rows, cols);
-	free(changeCounts);
-
-	return 0;
 }
