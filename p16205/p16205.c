@@ -1,4 +1,4 @@
-// 16250: 변수명
+// 16205: 변수명
 /*
  * 첫째 줄에 사용한 표기법의 번호와 변수명이 주어진다.
  * 번호가 1인 경우는 카멜 표기법, 2인 경우는 스네이크 표기법, 3인 경우는 파스칼 표기법이다.
@@ -8,6 +8,10 @@
  */
 // URL: https://www.acmicpc.net/problem/16205
 
+// 메모리: 1116 KB
+// 시간: 0 ms
+// 코드 길이: 2718 bytes
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -16,67 +20,15 @@ enum VARIABLE_CASES { CAMEL, SNAKE, PASCAL };
 
 struct VariableName
 {
-	char *camel;
-	char *snake;
-	char *pascal;
+	char* camel;
+	char* snake;
+	char* pascal;
 };
 
-char* camelToSnake(char *camel, size_t size)
-{
-	static char result[101] = "";
-	int index = 0;
-
-	for (size_t i = 0; i < size; i++)
-	{
-		result[index++] = camel[i];
-		if ('A' <= camel[i] && camel[i] <= 'Z')
-		{
-			result[index - 1] = '_';
-			result[index++] = tolower(camel[i]);
-		}
-	}
-	result[index] = '\0';
-
-	return result;
-}
-
-char* pascalToSnake(char *pascal, size_t size)
-{
-	char camel[101] = "";
-	strcpy(camel, pascal);
-	camel[0] = tolower(camel[0]);
-
-	static char result[101] = "";
-	strcpy(result, camelToSnake(camel, size));
-
-	return result;
-}
-
-char* snakeToCamel(char *snake, size_t size)
-{
-	static char result[101] = "";
-	int index = 0;
-
-	for (size_t i = 0; i < size; i++)
-	{
-		result[index++] = snake[i];
-		if (snake[i] == '_')
-		{
-			result[index - 1] = toupper(snake[++i]);
-		}
-	}
-
-	return result;
-}
-
-char* snakeToPascal(char *snake, size_t size)
-{
-	static char result[101] = "";
-	strcpy(result, snakeToCamel(snake, size));
-	result[0] = toupper(result[0]);
-
-	return result;
-}
+char* camelToSnake(char* camel, size_t size)
+char* pascalToSnake(char* pascal, size_t size)
+char* snakeToCamel(char* snake, size_t size)
+char* snakeToPascal(char* snake, size_t size)
 
 int main(void)
 {
@@ -110,4 +62,61 @@ int main(void)
 	printf("%s\n%s\n%s\n", input.camel, input.snake, input.pascal);
 	
 	return 0;
+}
+
+char* camelToSnake(char* camel, size_t size)
+{
+	static char result[101] = "";
+	int index = 0;
+
+	for (size_t i = 0; i < size; i++)
+	{
+		result[index++] = camel[i];
+		if ('A' <= camel[i] && camel[i] <= 'Z')
+		{
+			result[index - 1] = '_';
+			result[index++] = tolower(camel[i]);
+		}
+	}
+	result[index] = '\0';
+
+	return result;
+}
+
+char* pascalToSnake(char* pascal, size_t size)
+{
+	char camel[101] = "";
+	strcpy(camel, pascal);
+	camel[0] = tolower(camel[0]);
+
+	static char result[101] = "";
+	strcpy(result, camelToSnake(camel, size));
+
+	return result;
+}
+
+char* snakeToCamel(char* snake, size_t size)
+{
+	static char result[101] = "";
+	int index = 0;
+
+	for (size_t i = 0; i < size; i++)
+	{
+		result[index++] = snake[i];
+		if (snake[i] == '_')
+		{
+			result[index - 1] = toupper(snake[++i]);
+		}
+	}
+
+	return result;
+}
+
+char* snakeToPascal(char* snake, size_t size)
+{
+	static char result[101] = "";
+	strcpy(result, snakeToCamel(snake, size));
+	result[0] = toupper(result[0]);
+
+	return result;
 }
