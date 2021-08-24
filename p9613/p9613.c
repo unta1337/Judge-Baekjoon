@@ -4,62 +4,57 @@
  */
 // https://www.acmicpc.net/problem/9613
 
+// 메모리: 1116 KB
+// 시간: 0 ms
+// 코드 길이: 941 bytes
+// http://boj.kr/711596d34e3b4801a83391b969679f09
+
 #include <stdio.h>
 #include <stdlib.h>
 
-int euclideanAlgorithm(int p, int q);
+int gcdRec(int p, int q);
 int gcd(int p, int q);
-
-int getSumOfGCDs(int* inputs, int size);
 
 int main(void)
 {
 	int n;
 	scanf("%d", &n);
-	int** inputs = (int**)malloc(n * sizeof(int*));
-	int* results = (int*)malloc(n * sizeof(int));
-	int resultIndex = 0;
+	long long* results = (long long*)malloc(n * sizeof(long long));
 
 	for (int i = 0; i < n; i++)
 	{
 		int m;
 		scanf("%d", &m);
-		inputs[i] = (int*)malloc(m * sizeof(int));
+		int* inputs = (int*)malloc(m * sizeof(int));
 
 		for (int j = 0; j < m; j++)
-			scanf("%d", &inputs[i][j]);
+			scanf("%d", &inputs[j]);
 
-		results[resultIndex++] = getSumOfGCDs(inputs[i], m);
+		long long sum = 0;
+		for (int j = 0; j < m; j++)
+		{
+			for (int k = j + 1; k < m; k++)
+				sum += gcd(inputs[j], inputs[k]);
+		}
+		results[i] = sum;
+
+		free(inputs);
 	}
 
 	for (int i = 0; i < n; i++)
-		printf("%d\n", results[i]);
+		printf("%lld\n", results[i]);
 
-	for (int i = 0; i < n; i++)
-		free(inputs[i]);
-	free(inputs);
+	free(results);
 
 	return 0;
 }
 
-int euclideanAlgorithm(int p, int q)
+int gcdRec(int p, int q)
 {
-	return p % q ? euclideanAlgorithm(q, (p % q)) : q;
+	return p % q ? gcdRec(q, p % q) : q;
 }
 
 int gcd(int p, int q)
 {
-	return p > q ? euclideanAlgorithm(p, q) : euclideanAlgorithm(q, p);
-}
-
-int getSumOfGCDs(int* inputs, int size)
-{
-	int sum = 0;
-	for (int i = 0; i < size; i++)
-	{
-		for (int j = i + 1; j < size; j++)
-			sum += gcd(inputs[i], inputs[j]);
-	}
-
-	return sum;
+	return p > q ? gcdRec(p, q) : gcdRec(q, p);
 }

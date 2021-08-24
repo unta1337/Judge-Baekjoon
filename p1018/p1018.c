@@ -7,6 +7,7 @@
 // 메모리: 1116 KB
 // 시간: 0 ms
 // 코드 길이: 2853 bytes
+// http://boj.kr/c0ba6322f0ef44209cdc9bd8ed15cd99
 
 #include <stdio.h>
 #include <stdlib.h>
