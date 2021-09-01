@@ -4,6 +4,10 @@
  */
 // https://www.acmicpc.net/problem/4900
 
+// 메모리: 1124 KB
+// 시간: 12 ms
+// 코드 길이: 2027 bytes
+
 #include <stdio.h>
 #include <string.h>
 
@@ -68,6 +72,8 @@ int single_seven_to_decimal(char* seven)
 		if (!strcmp(seven, seven_seg[i]))
 			return i;
 	}
+
+	return -1;
 }
 
 int seven_to_decimal(char* seven)
