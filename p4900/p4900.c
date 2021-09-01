@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 
- char* seven_seg[10] =
+char* seven_seg[10] =
 {
 	"063",
 	"010",
