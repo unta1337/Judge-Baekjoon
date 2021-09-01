@@ -4,10 +4,10 @@
 #
 # https://www.acmicpc.net/problem/4900
 
-// 메모리: 1124 KB
-// 시간: 12 ms
-// 코드 길이: 2027 bytes
-// http://boj.kr/4df3a954c4d44bcc9936df73d5ecf178
+# 메모리: 29200 KB
+# 시간: 1540 ms
+# 코드 길이: 1497 bytes
+# http:#boj.kr/d2c0866f047440c894ba50b4a13586f9
 
 def main():
     seven_input = input()
