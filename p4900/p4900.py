@@ -1,3 +1,9 @@
+# 4900: 7 더하기
+#
+# 7 세그먼트 포멧의 두 수가 주어졌을 때, 두 수의 합의 7 세그먼트 포멧을 구하여라.
+#
+# https://www.acmicpc.net/problem/4900
+
 def main():
     seven_input = input()
     while seven_input != 'BYE':
@@ -60,7 +66,6 @@ if __name__ == '__main__':
         '127',
         '107'
     ]
-    seven_len = 3
     seven_size = 10
 
     main()
