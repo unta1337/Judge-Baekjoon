@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 int* _input;
+int* _dp;
 int _n;
 int _max;
 
@@ -30,12 +31,15 @@ int main(void)
 	scanf("%d", &_n);
 
 	_input = (int*)malloc(_n * sizeof(int));
+	_dp = (int*)calloc(_n, sizeof(int));
 	for (int i = 0; i < _n; i++)
 		scanf("%d", &_input[i]);
 
 	findMax(-1, 1, 0);
 
 	printf("%d\n", _max);
+
+	free(_input);
 
 	return 0;
 }
