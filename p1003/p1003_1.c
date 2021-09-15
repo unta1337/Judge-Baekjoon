@@ -51,12 +51,6 @@ int fibonacci(int n)
 	}
 	else
 	{
-		if (dp[n] != 0)
-			return dp[n];
-		else
-		{
-			dp[n] = fibonacci(n - 2) + fibonacci(n - 1);
-			return dp[n];
-		}
+		return fibonacci(n - 2) + fibonacci(n - 1);
 	}
 }
