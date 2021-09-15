@@ -1,6 +1,7 @@
-.vscode
-
+# 설정 및 디버깅 폴더 제외
+.vscode/
 .exe/
 
+# 디버깅 파일 제외
 a.exe
 a.out
