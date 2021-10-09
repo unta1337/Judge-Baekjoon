@@ -2,7 +2,12 @@
 /*
  * depth가 주어졌을 때, 재귀 관련 이야기를 하는 프로그램을 작성하시오.
  */
-// https://www.acmicpc.net/problem/17478
+// https://www.acmicpc.net/problem/1747
+
+// 메모리: 1116 KB
+// 시간: 0 ms
+// 코드 길이: 1609 bytes
+// http://boj.kr/f659904a5e834257acf7a59428f6722d
 
 #include <stdio.h>
 
