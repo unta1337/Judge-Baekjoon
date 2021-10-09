@@ -36,6 +36,8 @@ void print_phrases(int depth, int max_depth)
 		return;
 	}
 
+	if (depth == 0)
+		print_phrases_with_indentation(depth, phrases[0]);
 	for (int i = 1; i <= 4; i++)
 		print_phrases_with_indentation(depth, phrases[i]);
 	print_phrases(depth + 1, max_depth);
