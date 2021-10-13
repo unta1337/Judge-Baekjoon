@@ -6,7 +6,34 @@
 
 #include <stdio.h>
 
+int is_smaller(int A[], int B[])
+{
+	if ((A[0] < B[0]) && (A[1] < B[1]))
+		return 1;
+
+	return 0;
+}
+
+int get_place(int target[], int data[][2], int size)
+{
+	int lose_count = 0;
+	for (int i = 0; i < size; i++)
+		lose_count += is_smaller(target, data[i]);
+
+	return lose_count + 1;
+}
+
 int main(void)
 {
+	int data[50][2];
+
+	int n;
+	scanf("%d", &n);
+	for (int i = 0; i < n; i++)
+		scanf("%d %d", &data[i][0], &data[i][1]);
+
+	for (int i = 0; i < n; i++)
+		printf("%d\n", get_place(data[i], data, n));
+
 	return 0;
 }
