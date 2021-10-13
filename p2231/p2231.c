@@ -4,6 +4,11 @@
  */
 // https://www.acmicpc.net/problem/2231
 
+// 메모리: 1116 KB
+// 시간: 12 ms
+// 코드 길이: 679 bytes
+// http://boj.kr/910455735ebf4c6299a775f8b87f74c2
+
 #include <stdio.h>
 
 void get_digits(int number, int digits[])
