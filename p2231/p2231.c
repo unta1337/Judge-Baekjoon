@@ -6,7 +6,40 @@
 
 #include <stdio.h>
 
+void get_digits(int number, int digits[])
+{
+	int index = 0;
+	while (number > 0)
+	{
+		digits[index++] = number % 10;
+		number /= 10;
+	}
+}
+
+int get_decomposition(int number)
+{
+	for (int n = 0; n <= number; n++)
+	{
+		int digits[7] = { };
+		get_digits(n, digits);
+
+		int sum_of_digits = 0;
+		for (int i = 0; i < 7; i++)
+			sum_of_digits += digits[i];
+
+		if (n + sum_of_digits == number)
+			return n;
+	}
+
+	return 0;
+}
+
 int main(void)
 {
+	int n;
+	scanf("%d", &n);
+
+	printf("%d\n", get_decomposition(n));
+
 	return 0;
 }
