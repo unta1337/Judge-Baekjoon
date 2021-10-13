@@ -4,6 +4,11 @@
  */
 // https://www.acmicpc.net/problem/7568
 
+// 메모리: 1116 KB
+// 시간: 0 ms
+// 코드 길이: 683 bytes
+// http://boj.kr/e59cc31fc8274c1a8c557a21268b3b81
+
 #include <stdio.h>
 
 int is_smaller(int A[], int B[])
