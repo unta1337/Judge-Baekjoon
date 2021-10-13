@@ -9,6 +9,8 @@
 // 코드 길이: 948 bytes
 // http://boj.kr/f3ca8da35eee413d8dfe60addfb47cce
 
+#include <stdio.h>
+
 void get_digits(int number, int digits[])
 {
 	int index = 0;
@@ -59,8 +61,6 @@ int get_movie_name(int n)
 
 	return name;
 }
-
-#include <stdio.h>
 
 int main(void)
 {

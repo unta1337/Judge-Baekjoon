@@ -4,14 +4,7 @@
  */
 // https://www.acmicpc.net/problem/1436
 
-// 메모리: 1116 KB
-// 시간: 84 ms
-// 코드 길이: 948 bytes
-// http://boj.kr/f3ca8da35eee413d8dfe60addfb47cce
-
 #include <stdio.h>
-
-int dp[10001] = { 665, 666 };
 
 void get_digits(int number, int digits[])
 {
@@ -42,6 +35,8 @@ int six_in_a_row(int digits[], int size)
 	return max_count;
 }
 
+int dp[10001] = { 665, 666 };
+
 int get_movie_name_loop(int start, int n)
 {
 	int current = start;
@@ -54,7 +49,7 @@ int get_movie_name_loop(int start, int n)
 		int six_count = six_in_a_row(digits, 20);
 		if (six_count >= 3)
 		{
-			dp[n] = dp[n] ? dp[n] : current;
+			dp[n] = current;
 			break;
 		}
 

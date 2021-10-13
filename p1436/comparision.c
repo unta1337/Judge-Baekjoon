@@ -1,6 +1,5 @@
 #include <stdio.h>
-
-int dp[10000] = { 665, 666 };
+#include <stdlib.h>
 
 void get_digits(int number, int digits[])
 {
@@ -53,7 +52,9 @@ int non_dp(int n)
 	return name;
 }
 
-int dp_1(int start, int n)
+int dp_[10001] = { 665, 666 };
+
+int dp__(int start, int n)
 {
 	int current = start;
 
@@ -65,7 +66,7 @@ int dp_1(int start, int n)
 		int six_count = six_in_a_row(digits, 20);
 		if (six_count >= 3)
 		{
-			dp[n] = dp[n] ? dp[n] : current;
+			dp_[n] = current;
 			break;
 		}
 
@@ -75,30 +76,36 @@ int dp_1(int start, int n)
 	return current;
 }
 
-int dp_2(int n)
+int dp(int n)
 {
-	if (dp[n])
-		return dp[n];
+	if (dp_[n])
+		return dp_[n];
 
 	int index = n - 1;
-	while (!dp[index])
+	while (!dp_[index])
 		index--;
 
 	for (int i = index + 1; i <= n; i++)
-		dp_1(dp[i - 1] + 1, i);
+		dp__(dp_[i - 1] + 1, i);
 
-	return dp[n];
+	return dp_[n];
 }
 
-int main(void)
+int main(int argc, char* const argv[])
 {
-	for (int i = 1; i < 10000; i++)
+	int iteration = argc > 1 ? strtol(argv[1], NULL, 10) : 10000;
+
+	for (int i = 1; i <= iteration; i++)
 	{
-		int a = non_dp(i);
-		int b = dp_2(i);
-		if (a != b || i % 100 == 0)
-			printf("%d %d %d %d\n", i, a, b, a ==b);
+		if (i % 100 == 0)
+			printf("Non-DP[%d]: %d\n", i, non_dp(i));
 	}
-	printf("done!\n");
+
+	for (int i = 1; i <= iteration; i++)
+	{
+		if (i % 100 == 0)
+			printf("DP[%d]: %d\n", i, dp(i));
+	}
+
 	return 0;
 }
