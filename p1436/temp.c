@@ -1,17 +1,6 @@
-// 1436: 영화감독 숌
-/*
- * 종말의 숫자로 지은 영화 이름을 구하여라.
- */
-// https://www.acmicpc.net/problem/1436
-
-// 메모리: 1116 KB
-// 시간: 84 ms
-// 코드 길이: 948 bytes
-// http://boj.kr/f3ca8da35eee413d8dfe60addfb47cce
-
 #include <stdio.h>
 
-int dp[10001] = { 665, 666 };
+int dp[10000] = { 665, 666 };
 
 void get_digits(int number, int digits[])
 {
@@ -42,7 +31,29 @@ int six_in_a_row(int digits[], int size)
 	return max_count;
 }
 
-int get_movie_name_loop(int start, int n)
+int non_dp(int n)
+{
+	int count = 0;
+	int six_count = 0;
+	int name = 0;
+
+	for (int i = 666; count < n; i++)
+	{
+		int digits[20] = { };
+		get_digits(i, digits);
+
+		six_count = six_in_a_row(digits, 20);
+		if (six_count >= 3)
+		{
+			name = i;
+			count++;
+		}
+	}
+
+	return name;
+}
+
+int dp_1(int start, int n)
 {
 	int current = start;
 
@@ -64,7 +75,7 @@ int get_movie_name_loop(int start, int n)
 	return current;
 }
 
-int get_movie_name(int n)
+int dp_2(int n)
 {
 	if (dp[n])
 		return dp[n];
@@ -74,17 +85,20 @@ int get_movie_name(int n)
 		index--;
 
 	for (int i = index + 1; i <= n; i++)
-		get_movie_name_loop(dp[i - 1] + 1, i);
+		dp_1(dp[i - 1] + 1, i);
 
 	return dp[n];
 }
 
 int main(void)
 {
-	int n;
-	scanf("%d", &n);
-
-	printf("%d\n", get_movie_name(n));
-
+	for (int i = 1; i < 10000; i++)
+	{
+		int a = non_dp(i);
+		int b = dp_2(i);
+		if (a != b || i % 100 == 0)
+			printf("%d %d %d %d\n", i, a, b, a ==b);
+	}
+	printf("done!\n");
 	return 0;
 }
