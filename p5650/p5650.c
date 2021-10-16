@@ -4,6 +4,11 @@
  */
 // https://www.acmicpc.net/problem/5650
 
+// 메모리: 1116 KB
+// 시간: 0 ms
+// 코드 길이: 1793 bytes
+// http://boj.kr/b2de52f1228148fca8ec414d53de1d89
+
 #include <stdio.h>
 
 typedef struct Software_license
