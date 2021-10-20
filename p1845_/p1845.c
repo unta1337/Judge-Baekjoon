@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 void rotate_array(int arr[], int size, int start, int end)
 {
@@ -26,25 +28,61 @@ void rotate_array(int arr[], int size, int start, int end)
 		arr[i] *= -1;
 }
 
+int array_equal(int arr1[], int arr2[], int size)
+{
+	for (int i = 0; i < size; i++)
+	{
+		if (arr1[i] != arr2[i])
+			return 0;
+	}
+
+	return 1;
+}
+
+void rec(int arr[], int size, int prev_move[], int depth)
+{
+	int target[] = { -4, -3, -5, 1, 2, 6 };
+	if (array_equal(arr, target, size))
+	{
+		printf("rec depth %d\n", depth);
+		for (int i = 0; i < size; i++)
+			printf("%d ", arr[i]);
+		printf("\n");
+
+		return;
+	}
+
+	if (depth == 3)
+		return;
+
+	for (int i = 1; i <= size; i++)
+	{
+		for (int j = i; j <= size; j++)
+		{
+			int* new_arr = (int*)malloc(size * sizeof(int));
+			memcpy(new_arr, arr, size * sizeof(int));
+
+			rotate_array(new_arr, size, i, j);
+
+			rec(new_arr, size, prev_move, depth + 1);
+
+			free(new_arr);
+		}
+	}
+}
+
 int main(void)
 {
-	int arr[] = { 1, 2, 3, 4, 5, 6 };
-	int size = sizeof(arr) / sizeof(arr[0]);
+	int arr[250];
+	for (int i = 0; i < 250; i++)
+		arr[i] = i + 1;
 
-	for (int i = 0; i < size; i++)
-		printf("%d ", arr[i]);
-	printf("\n");
+	int size;
+	scanf("%d", &size);
+	
+	int prev_move[2] = { };
 
-	rotate_array(arr, size, 1, 4);
+	rec(arr, size, prev_move, 0);
 
-	for (int i = 0; i < size; i++)
-		printf("%d ", arr[i]);
-	printf("\n");
-
-	rotate_array(arr, size, 3, 5);
-
-	for (int i = 0; i < size; i++)
-		printf("%d ", arr[i]);
-	printf("\n");
 	return 0;
 }
