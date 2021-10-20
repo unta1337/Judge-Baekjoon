@@ -39,8 +39,12 @@ int array_equal(int arr1[], int arr2[], int size)
 	return 1;
 }
 
-void rec(int arr[], int size, int prev_move[], int depth)
+void rec(int arr[], int size, int depth)
 {
+	static int found = 0;
+	if (found)
+		return;
+
 	int target[] = { -4, -3, -5, 1, 2, 6 };
 	if (array_equal(arr, target, size))
 	{
@@ -49,10 +53,12 @@ void rec(int arr[], int size, int prev_move[], int depth)
 			printf("%d ", arr[i]);
 		printf("\n");
 
+		found = 1;
+
 		return;
 	}
 
-	if (depth == 3)
+	if (depth == 5)
 		return;
 
 	for (int i = 1; i <= size; i++)
@@ -64,7 +70,7 @@ void rec(int arr[], int size, int prev_move[], int depth)
 
 			rotate_array(new_arr, size, i, j);
 
-			rec(new_arr, size, prev_move, depth + 1);
+			rec(new_arr, size, depth + 1);
 
 			free(new_arr);
 		}
@@ -79,10 +85,8 @@ int main(void)
 
 	int size;
 	scanf("%d", &size);
-	
-	int prev_move[2] = { };
 
-	rec(arr, size, prev_move, 0);
+	rec(arr, size, 0);
 
 	return 0;
 }
