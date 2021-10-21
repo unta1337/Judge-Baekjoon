@@ -2,6 +2,68 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct Stack
+{
+	int** arr;
+	int size;
+	int index;
+
+	void (*push)(struct Stack* this, int value[]);
+	void (*pop)(struct Stack* this, int dest[]);
+} Stack;
+
+void Stack_push(Stack* this, int value[])
+{
+	if (this->index == this->size)
+	{
+		this->size *= 2;
+		this->arr = (int**)realloc(this->arr, this->size * sizeof(int*));
+	}
+
+	this->arr[this->index++] = (int*)malloc(2 * sizeof(int));
+	this->arr[this->index - 1][0] = value[0];
+	this->arr[this->index - 1][1] = value[1];
+}
+
+void Stack_pop(Stack* this, int dest[])
+{
+	if (this->index == 0)
+		return;
+
+	if (this->index == this->size / 2)
+	{
+		this->size /= 2;
+		this->arr = (int**)realloc(this->arr, this->size * sizeof(int*));
+	}
+
+	dest[0] = this->arr[--this->index][0];
+	dest[1] = this->arr[this->index][1];
+
+	free(this->arr[this->index]);
+}
+
+Stack* create_stack()
+{
+	Stack* this = (Stack*)malloc(sizeof(Stack));
+
+	this->arr = (int**)malloc(sizeof(int*));
+	this->size = 1;
+	this->index = 0;
+
+	this->push = &Stack_push;
+	this->pop = &Stack_pop;
+
+	return this;
+}
+
+void delete_stack(Stack* this)
+{
+	for (int i = 0; i < this->index; i++)
+		free(this->arr[i]);
+	free(this->arr);
+	free(this);
+}
+
 void rotate_array(int arr[], int size, int start, int end)
 {
 	start--;
@@ -41,19 +103,13 @@ int array_equal(int arr1[], int arr2[], int size)
 
 void rec(int arr[], int size, int depth)
 {
-	static int found = 0;
-	if (found)
-		return;
-
 	int target[] = { -4, -3, -5, 1, 2, 6 };
 	if (array_equal(arr, target, size))
 	{
-		printf("rec depth %d\n", depth);
-		for (int i = 0; i < size; i++)
-			printf("%d ", arr[i]);
-		printf("\n");
-
-		found = 1;
+		//printf("rec depth %d\n", depth);
+		//for (int i = 0; i < size; i++)
+			//printf("%d ", arr[i]);
+		//printf("\n");
 
 		return;
 	}
@@ -79,14 +135,5 @@ void rec(int arr[], int size, int depth)
 
 int main(void)
 {
-	int arr[250];
-	for (int i = 0; i < 250; i++)
-		arr[i] = i + 1;
-
-	int size;
-	scanf("%d", &size);
-
-	rec(arr, size, 0);
-
 	return 0;
 }
