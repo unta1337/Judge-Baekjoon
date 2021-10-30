@@ -5,6 +5,7 @@
 // https://www.acmicpc.net/problem/1003
 
 #include <stdio.h>
+#include <stdlib.h>
 
 const int** fibonacci_rec(int n)
 {
@@ -37,8 +38,29 @@ int* fibonacci(int n)
 
 int main(void)
 {
-    int* result = fibonacci(3);
-    printf("%d %d\n", result[0], result[1]);
+    int T;
+    scanf("%d", &T);
+
+    int** results = (int**)malloc(T * sizeof(int*));
+
+    for (int i = 0; i < T; i++)
+    {
+        int N;
+        scanf("%d", &N);
+
+        int* result = fibonacci(N);
+
+        results[i] = (int*)malloc(2 * sizeof(int));
+        results[i][0] = result[0];
+        results[i][1] = result[1];
+    }
+
+    for (int i = 0; i < T; i++)
+        printf("%d %d\n", results[i][0], results[i][1]);
+
+    for (int i = 0; i < T; i++)
+        free(results[i]);
+    free(results);
 
     return 0;
 }
