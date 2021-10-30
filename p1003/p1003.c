@@ -1,62 +1,44 @@
 // 1003: 피보나치 함수
 /*
- * 피보나치의 n번째 항을 계산하는 프로그램을 동적 계획법을 사용해 작성하시오.
+ * 피보나치 수열을 재귀적으로 구현한 함수에서 base case인 0과 1이 호출되는 횟수를 구하여라.
  */
 // https://www.acmicpc.net/problem/1003
 
 #include <stdio.h>
-#include <stdlib.h>
 
-int zero_count = 0;
-int one_count = 0;
-int* dp;
+const int** fibonacci_rec(int n)
+{
+    static int zero_count[50] = { 1, 0, };
+    static int one_count[50] = { 0, 1, };
+    static const int* ret[2] = { zero_count, one_count };
 
-int fibonacci(int n);
+    if (zero_count[n] != 0 || n == 0 || n ==1)
+        return ret;
+
+    fibonacci_rec(n - 1);
+    fibonacci_rec(n - 2);
+
+    zero_count[n] = zero_count[n - 1] + zero_count[n - 2];
+    one_count[n] = one_count[n - 1] + one_count[n - 2];
+
+    return ret;
+}
+
+int* fibonacci(int n)
+{
+    static int ret[2];
+
+    const int** result = fibonacci_rec(n);
+    ret[0] = result[0][n];
+    ret[1] = result[1][n];
+
+    return ret;
+}
 
 int main(void)
 {
-	int n;
-	scanf("%d", &n);
+    int* result = fibonacci(3);
+    printf("%d %d\n", result[0], result[1]);
 
-	for (int i = 0; i < n; i++)
-	{
-		int m;
-		scanf("%d", &m);
-
-		dp = (int*)calloc(m, sizeof(int));
-
-		fibonacci(m);
-
-		printf("%d %d\n", zero_count, one_count);
-		zero_count = 0;
-		one_count = 0;
-
-		free(dp);
-	}
-
-	return 0;
-}
-
-int fibonacci(int n)
-{
-	if (n == 0)
-	{
-		zero_count++;
-		return 0;
-	}
-	else if (n == 1)
-	{
-		one_count++;
-		return 1;
-	}
-	else
-	{
-		if (dp[n] != 0)
-			return dp[n];
-		else
-		{
-			dp[n] = fibonacci(n - 2) + fibonacci(n - 1);
-			return dp[n];
-		}
-	}
+    return 0;
 }
