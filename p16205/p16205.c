@@ -26,10 +26,10 @@ struct VariableName
 	char* pascal;
 };
 
-char* camelToSnake(char* camel, size_t size)
-char* pascalToSnake(char* pascal, size_t size)
-char* snakeToCamel(char* snake, size_t size)
-char* snakeToPascal(char* snake, size_t size)
+char* camelToSnake(char* camel, size_t size);
+char* pascalToSnake(char* pascal, size_t size);
+char* snakeToCamel(char* snake, size_t size);
+char* snakeToPascal(char* snake, size_t size);
 
 int main(void)
 {
