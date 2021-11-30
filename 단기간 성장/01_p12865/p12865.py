@@ -4,6 +4,11 @@
 #
 # https://www.acmicpc.net/problem/12865
 
+# 메모리: 226652 KB
+# 시간: 5852 ms
+# 코드 길이: 1400 bytes
+# http://boj.kr/26d9f11073894e5d9980b15c378d07d8
+
 def main():
     # 입력.
     N, K = list(map(int, input().split(' ')))
