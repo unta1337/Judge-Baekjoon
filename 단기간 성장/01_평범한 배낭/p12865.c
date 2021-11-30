@@ -4,6 +4,11 @@
  */
 // https://www.acmicpc.net/problem/12865
 
+// 메모리: 40708 KB
+// 시간: 44 ms
+// 코드 길이: 2436 bytes
+// http://boj.kr/487032e60ced40fda4ea2d65fb6a1147
+
 #include <stdio.h>
 #include <stdlib.h>
 
