@@ -116,6 +116,14 @@ int priority_queue_pop(priority_queue* this)
     return ret;
 }
 
+int priority_queue_top(priority_queue* this)
+{
+    if (this->size == 0)
+        return 0;
+
+    return this->heap[0];
+}
+
 priority_queue* create_priority_queue(int (*comp)(int p, int q))
 {
     priority_queue* this = (priority_queue*)calloc(1, sizeof(priority_queue));
