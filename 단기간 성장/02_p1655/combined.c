@@ -122,7 +122,7 @@ int priority_queue_top(priority_queue* this)
     return this->heap[0];
 }
 
-priority_queue* create_priority_queue(int (*comp)(int p, int q))
+priority_queue* create_priority_queue(int comp)
 {
     priority_queue* this = (priority_queue*)calloc(1, sizeof(priority_queue));
 
@@ -130,7 +130,10 @@ priority_queue* create_priority_queue(int (*comp)(int p, int q))
     this->size = 0;
     this->capacity = 1;
 
-    this->comp = comp;
+    if (comp == 0)
+        this->comp = min;
+    else if (comp == 1)
+        this->comp = max;
 
     return this;
 }
@@ -143,8 +146,8 @@ void delete_priority_queue(priority_queue* this)
 
 int main()
 {
-    priority_queue* max_heap = create_priority_queue(max);
-    priority_queue* min_heap = create_priority_queue(min);
+    priority_queue* max_heap = create_priority_queue(1);
+    priority_queue* min_heap = create_priority_queue(0);
 
     int N;
     scanf("%d", &N);
