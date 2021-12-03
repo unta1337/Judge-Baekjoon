@@ -32,6 +32,20 @@ int* find_swan(char** grid, int rows, int cols)
     return NULL;
 }
 
+int is_melted(char** grid, int rows, int cols)
+{
+    for (int row = 0; row < rows; row++)
+    {
+        for (int col = 0; col < cols; col++)
+        {
+            if (grid[row][col] == 'X')
+                return 0;
+        }
+    }
+
+    return 1;
+}
+
 int am_i_melt(char** grid, int rows, int cols, int row, int col)
 {
     if (grid[row][col] == '.')
@@ -112,20 +126,17 @@ int main()
         grid[i] = test_grid[i];
 
     int* swan = find_swan(grid, 8, 17);
-    printf("Swan: %d, %d\n\n", swan[0], swan[1]);
+    printf("Swan: [%d][%d]\n\n", swan[0], swan[1]);
+
+    while (!is_melted(grid, rows, cols))
+    {
+        print_grid(grid, 8, 17);
+        printf("\n");
+
+        next_iteration(grid, 8, 17);
+    }
 
     print_grid(grid, 8, 17);
-    printf("\n");
-
-    next_iteration(grid, 8, 17);
-
-    print_grid(grid, 8, 17);
-    printf("\n");
-
-    next_iteration(grid, 8, 17);
-
-    print_grid(grid, 8, 17);
-    printf("\n");
 
     free(grid);
 
