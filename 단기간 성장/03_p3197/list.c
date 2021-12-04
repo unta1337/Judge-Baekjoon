@@ -23,6 +23,27 @@ void list_push(list* this, int* value)
     this->size++;
 }
 
+int list_contains(list* this, int* value)
+{
+    for (int i = 0; i < this->size; i++)
+    {
+        if (this->arr[i][0] == value[0] && this->arr[i][1] == value[1])
+            return 1;
+    }
+
+    return 0;
+}
+
+void list_print(list* this)
+{
+    printf("List: \n");
+    for (int i = 0; i < this->size; i++)
+    {
+        printf("\t{ %d, %d }\n", this->arr[i][0], this->arr[i][1]);
+    }
+    printf("\n");
+}
+
 list* create_list()
 {
     list* this = (list*)malloc(sizeof(list));
@@ -45,12 +66,20 @@ void delete_list(list* this)
 int main()
 {
     list* lst = create_list();
+    int size = 10;
 
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < size; i++)
         list_push(lst, (int[]){ i, i + 1 });
 
-    for (int i = 0; i < 100; i++)
-        printf("%d %d\n", lst->arr[i][0], lst->arr[i][1]);
+    list_print(lst);
+
+    for (int i = 0; i < size; i++)
+        printf("{ %d, %d } is %s.\n", i, i + 1, list_contains(lst, (int[]){ i, i + 1 }) ? "exits" : "not exits");
+
+    printf("\n");
+
+    for (int i = 0; i < size; i++)
+        printf("{ %d, %d } is %s.\n", i + 1, i, list_contains(lst, (int[]){ i + 1, i }) ? "exits" : "not exits");
 
     return 0;
 }
