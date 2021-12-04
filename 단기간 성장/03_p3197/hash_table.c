@@ -19,7 +19,7 @@ int list_contains(list* this, int* value)
     return 0;
 }
 
-void list_push(list* this, int* value)
+void list_push(list* this, int value1, int value2)
 {
     if (this->size == this->capacity)
     {
@@ -28,8 +28,8 @@ void list_push(list* this, int* value)
     }
 
     this->arr[this->size] = (int*)malloc(2 * sizeof(int));
-    this->arr[this->size][0] = value[0];
-    this->arr[this->size][1] = value[1];
+    this->arr[this->size][0] = value1;
+    this->arr[this->size][1] = value2;
 
     this->size++;
 }
@@ -77,21 +77,30 @@ typedef struct hash_table
 int hash(hash_table* this, int* value)
 {
     int hash = value[0] * 37633 + value[1] * 10093 + 22198;
+    hash = hash < 0 ? -hash : hash;
 
     return hash % this->size;
 }
 
-void hash_table_push(hash_table* this, int* value)
+void hash_table_push(hash_table* this, int value1, int value2)
 {
+    int* value = (int*)malloc(2 * sizeof(int));
+    value[0] = value1;
+    value[1] = value2;
+
     int index = this->hash(this, value);
 
     if (list_contains(this->table[index], value))
             return;
-    list_push(this->table[index], value);
+    list_push(this->table[index], value1, value2);
+
+    free(value);
 }
 
-void hash_table_contains()
+int hash_table_contains(hash_table* this, int* value)
 {
+    int index = this->hash(this, value);
+    return list_contains(this->table[index], value);
 }
 
 void hash_table_print(hash_table* this)
@@ -108,7 +117,7 @@ hash_table* create_hash_table(int (*hash)(hash_table* this, int* value))
 {
     hash_table* this = (hash_table*)malloc(sizeof(hash_table));
 
-    int default_size = 256;
+    int default_size = 1000000;
 
     this->table = (list**)malloc(default_size * sizeof(list*));
     for (int i = 0; i < default_size; i++)
@@ -132,14 +141,21 @@ int main()
 {
     hash_table* table = create_hash_table(&hash);
 
-    int size = 64;
+    int size = 10;
 
     for (int i = 0; i < size; i++)
-    {
-        hash_table_push(table, (int[]){rand() % size, rand() % size });
-    }
+        hash_table_push(table, i, i + 1);
 
     hash_table_print(table);
+
+    for (int i = 0; i < size; i++)
+        printf("{ %d, %d } %d\n", i, i + 1, hash_table_contains(table, (int[]){ i, i + 1 }));
+    printf("\n");
+
+    for (int i = 0; i < size; i++)
+        printf("{ %d, %d } %d\n", i + 1, i, hash_table_contains(table, (int[]){ i + 1, i }));
+
+    delete_hash_table(table);
 
     return 0;
 }
