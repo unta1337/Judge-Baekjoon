@@ -2,7 +2,7 @@
 /*
  * n개의 정수가 주어질 때, 최솟값과 최댓값을 구하여라.
  */
-// https://www.acmicpc.net/problem/9613
+// https://www.acmicpc.net/problem/10818
 
 // 메모리: 1112 KB
 // 시간: 184 ms
