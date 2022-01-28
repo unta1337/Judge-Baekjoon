@@ -12,6 +12,19 @@ grid_t* create_grid(int rows, int cols);
 void delete_grid(grid_t* this);
 void print_grid(grid_t* grid);
 
+typedef struct queue
+{
+    int size;
+    int capacity;
+    int** pairs;
+} queue_t;
+
+queue_t* create_queue();
+void delete_queue(queue_t* this);
+void q_push(queue_t* this, int pair[2]);
+void q_pop(queue_t* this);
+void q_print(queue_t* this);
+
 int main(void)
 {
     char test_grid[8][17] =
@@ -71,4 +84,58 @@ void print_grid(grid_t* grid)
             printf("%c", grid->grid[row][col]);
         printf("\n");
     }
+}
+
+queue_t* create_queue()
+{
+    queue_t* this = (queue_t*)malloc(sizeof(queue_t));
+
+    this->size = 0;
+    this->capacity = 1;
+    this->pairs = (int**)malloc(sizeof(int**));
+
+    return this;
+}
+
+void delete_queue(queue_t* this)
+{
+    for (int i = 0; i < this->size; i++)
+        free(this->pairs[i]);
+    free(this->pairs);
+    free(this);
+}
+
+void q_push(queue_t* this, int pair[2])
+{
+    if (this->size == this->capacity)
+    {
+        this->capacity *= 2;
+        this->pairs = (int**)realloc(this->pairs, this->capacity * sizeof(int*));
+    }
+
+    this->pairs[this->size] = (int*)malloc(2 * sizeof(int*));
+    this->pairs[this->size][0] = pair[0];
+    this->pairs[this->size][1] = pair[1];
+
+    this->size++;
+}
+
+void q_pop(queue_t* this)
+{
+    if (this->size == 0)
+        return;
+
+    free(this->pairs[--this->size]);
+
+    if (this->size < this->capacity / 2)
+    {
+        this->capacity /= 2;
+        this->pairs = (int**)realloc(this->pairs, this->capacity * sizeof(int*));
+    }
+}
+
+void q_print(queue_t* this)
+{
+    for (int i = 0; i < this->size; i++)
+        printf("(%d, %d) \n", this->pairs[i][0], this->pairs[i][1]);
 }
