@@ -37,42 +37,32 @@ int can_they_meet(grid_t* grid, int swan[2]);           // 백조1이 백조2를
 
 int main(void)
 {
-    char test_grid[8][17] =
-    {
-        { '.', '.', '.', 'X', 'X', 'X', 'X', 'X', 'X', '.', '.', 'X', 'X', '.', 'X', 'X', 'X' },
-        { '.', '.', '.', '.', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', '.', 'X', 'X', 'X' },
-        { '.', '.', '.', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', '.', '.' },
-        { '.', '.', 'X', 'X', 'X', 'X', 'X', '.', 'L', 'X', 'X', 'X', 'X', 'X', 'X', '.', '.' },
-        { '.', 'X', 'X', 'X', 'X', 'X', 'X', '.', '.', 'X', 'X', 'X', 'X', 'X', 'X', '.', '.' },
-        { 'X', 'X', 'X', 'X', 'X', 'X', 'X', '.', '.', '.', 'X', 'X', 'X', 'X', '.', '.', '.' },
-        { '.', '.', 'X', 'X', 'X', 'X', 'X', '.', '.', '.', 'X', 'X', 'X', '.', '.', '.', '.' },
-        { '.', '.', '.', '.', 'X', 'X', 'X', 'X', 'X', '.', 'X', 'X', 'X', 'L', '.', '.', '.' }
-    };
+    int rows, cols;
+    scanf("%d %d", &rows, &cols);
 
-    grid_t* grid = create_grid(8, 17);
+    grid_t* grid = create_grid(rows, cols);
     for (int row = 0; row < grid->rows; row++)
     {
-        for (int col = 0; col < grid->cols; col++)
-        {
-            grid->grid[row][col] = test_grid[row][col];
-        }
+        char* temp = (char*)malloc((cols + 1) * sizeof(char));
+        scanf("%s", temp);
+
+        for (int col = 0; col < cols; col++)
+            grid->grid[row][col] = temp[col];
+
+        // free(temp);
     }
 
     int swan[2];
     find_swan(grid, swan);
 
-    print_grid(grid);
-    printf("%d\n", can_they_meet(grid, swan));
-    printf("\n");
-    next_grid(grid);
+    int day_count = 0;
+    while (!can_they_meet(grid, swan))
+    {
+        next_grid(grid);
+        day_count++;
+    }
 
-    print_grid(grid);
-    printf("%d\n", can_they_meet(grid, swan));
-    printf("\n");
-    next_grid(grid);
-
-    print_grid(grid);
-    printf("%d\n", can_they_meet(grid, swan));
+    printf("%d\n", day_count);
 
     delete_grid(grid);
 
@@ -177,15 +167,20 @@ char get_next_cell(grid_t* grid, int location[2])
     int row = location[0], col = location[1];
 
     char cell = grid->grid[row][col];
+
+    // 빙하가 아니면 다음 상태를 볼 필요가 없음.
     if (cell != 'X')
         return cell;
 
     for (int row_diff = -1; row_diff <= 1; row_diff++)
     {
         int row_index = row + row_diff;
+
+        // 셀이 범위를 벗어나면 무시.
         if (!(0 <= row_index && row_index < grid->rows))
             continue;
 
+        // 주변에 물이 하나라도 있으면 녹음.
         if (grid->grid[row_index][col] == '.')
             return '.';
     }
@@ -200,16 +195,19 @@ char get_next_cell(grid_t* grid, int location[2])
             return '.';
     }
 
+    // 아무 것에도 해당하지 않으면 빙하는 녹지 않는다.
     return 'X';
 }
 
 void next_grid(grid_t* grid)
 {
+    // 임시 그리드에 다음 상태 저장.
     grid_t* next = create_grid(grid->rows, grid->cols);
     for (int row = 0; row < grid->rows; row++)
         for (int col = 0; col < grid->cols; col++)
             next->grid[row][col] = get_next_cell(grid, (int[2]){ row, col });
 
+    // 그리드 갱신.
     for (int row = 0; row < grid->rows; row++)
         for (int col = 0; col < grid->cols; col++)
             grid->grid[row][col] = next->grid[row][col];
@@ -231,13 +229,22 @@ void find_swan(grid_t* grid, int ret[2])
 
 int can_they_meet(grid_t* grid, int swan[2])
 {
+    // BFS를 위한 큐 생성.
     queue_t* path = create_queue();
     q_push(path, swan);
 
+    // 이미 방문한 셀 저장.
     int** visited = (int**)calloc(grid->rows, sizeof(int*));
     for (int i = 0; i < grid->rows; i++)
         visited[i] = (int*)calloc(grid->cols, sizeof(int));
     visited[swan[0]][swan[1]] = 1;
+
+    // for (int i = 0; i < grid->rows; i++)
+    // {
+    //     for (int j = 0; j < grid->cols; j++)
+    //         printf("{%d}", visited[i][j]);
+    //     printf("\n");
+    // }
 
     int is_first = 1;
     int found = 0;
@@ -252,8 +259,11 @@ int can_they_meet(grid_t* grid, int swan[2])
             goto push;
         }
 
+        // 셀이 범위를 벗어나면 무시.
         if (!(0 <= current_cell[0] && current_cell[0] < grid->rows) || !(0 <= current_cell[0] && current_cell[1] < grid->cols))
             continue;
+
+        // 셀을 이미 방문했으면 무시.
         if (visited[current_cell[0]][current_cell[1]])
             continue;
         visited[current_cell[0]][current_cell[1]] = 1;
@@ -276,8 +286,8 @@ int can_they_meet(grid_t* grid, int swan[2])
     }
 
     delete_queue(path);
-    for (int i = 0; i < grid->rows; i++)
-        free(visited[i]);
+    // for (int i = 0; i < grid->rows; i++)
+    //     free(visited[i]);
     free(visited);
     return found;
 }
