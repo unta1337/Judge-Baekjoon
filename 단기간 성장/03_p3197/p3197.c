@@ -31,72 +31,9 @@ void q_print(queue_t* this);
 char get_next_cell(grid_t* grid, int location[2]);      // 특정 셀의 다음 상태를 반환.
 void next_grid(grid_t* grid);                           // 모든 셀을 다음 상태로 갱신.
 
-void find_swan(grid_t* grid, int ret[2])
-{
-    for (int row = 0; row < grid->rows; row++)
-        for (int col = 0; col < grid->cols; col++)
-            if (grid->grid[row][col] == 'L')
-            {
-                ret[0] = row;
-                ret[1] = col;
-                return;
-            }
-}
-
-int can_they_meet(grid_t* grid, int swan[2])
-{
-    queue_t* path = create_queue();
-    q_push(path, swan);
-
-    int** visited = (int**)malloc(grid->rows * sizeof(int*));
-    for (int i = 0; i < grid->rows; i++)
-        visited[i] = (int*)malloc(2 * sizeof(int));
-    visited[swan[0]][swan[1]] = 1;
-
-    int is_first = 1;
-    while (path->size > 0)
-    {
-        int current_cell[2];
-        q_pop(path, current_cell);
-
-        if (is_first)
-        {
-            is_first = 0;
-            goto push;
-        }
-
-        if (!(0 <= current_cell[0] && current_cell[0] < grid->rows) || !(0 <= current_cell[0] && current_cell[1] < grid->cols))
-            continue;
-        if (visited[current_cell[0]][current_cell[1]])
-            continue;
-        visited[current_cell[0]][current_cell[1]] = 1;
-
-        char cell = grid->grid[current_cell[0]][current_cell[1]];
-
-        if (cell == 'X')
-            continue;
-        else if (cell == 'L')
-        {
-            // delete_queue(path);
-            // for (int i = 0; i < grid->cols; i++)
-            //     free(visited[i]);
-            free(visited);
-            return 1;
-        }
-
-        push:
-        q_push(path, (int[2]){ current_cell[0] - 1, current_cell[1] });
-        q_push(path, (int[2]){ current_cell[0] + 1, current_cell[1] });
-        q_push(path, (int[2]){ current_cell[0], current_cell[1] - 1 });
-        q_push(path, (int[2]){ current_cell[0], current_cell[1] + 1 });
-    }
-
-    // delete_queue(path);
-    // for (int i = 0; i < grid->cols; i++)
-    //     free(visited[i]);
-    // free(visited);
-    return 0;
-}
+// 다른 백조 찾기 함수.
+void find_swan(grid_t* grid, int ret[2]);               // 백조1 찾기.
+int can_they_meet(grid_t* grid, int swan[2]);           // 백조1이 백조2를 만날 수 있는가?
 
 int main(void)
 {
@@ -179,7 +116,7 @@ queue_t* create_queue()
 
     this->size = 0;
     this->capacity = 1;
-    this->pairs = (int**)malloc(sizeof(int**));
+    this->pairs = (int**)malloc(sizeof(int*));
 
     return this;
 }
@@ -200,7 +137,7 @@ void q_push(queue_t* this, int pair[2])
         this->pairs = (int**)realloc(this->pairs, this->capacity * sizeof(int*));
     }
 
-    this->pairs[this->size] = (int*)malloc(2 * sizeof(int*));
+    this->pairs[this->size] = (int*)malloc(2 * sizeof(int));
     this->pairs[this->size][0] = pair[0];
     this->pairs[this->size][1] = pair[1];
 
@@ -220,7 +157,7 @@ void q_pop(queue_t* this, int ret[2])
         this->pairs[i - 1][0] = this->pairs[i][0];
         this->pairs[i - 1][1] = this->pairs[i][1];
     }
-    this->size--;
+    free(this->pairs[--this->size]);
 
     if (this->size > 1 && this->size < this->capacity / 2)
     {
@@ -278,4 +215,69 @@ void next_grid(grid_t* grid)
             grid->grid[row][col] = next->grid[row][col];
     
     delete_grid(next);
+}
+
+void find_swan(grid_t* grid, int ret[2])
+{
+    for (int row = 0; row < grid->rows; row++)
+        for (int col = 0; col < grid->cols; col++)
+            if (grid->grid[row][col] == 'L')
+            {
+                ret[0] = row;
+                ret[1] = col;
+                return;
+            }
+}
+
+int can_they_meet(grid_t* grid, int swan[2])
+{
+    queue_t* path = create_queue();
+    q_push(path, swan);
+
+    int** visited = (int**)calloc(grid->rows, sizeof(int*));
+    for (int i = 0; i < grid->rows; i++)
+        visited[i] = (int*)calloc(grid->cols, sizeof(int));
+    visited[swan[0]][swan[1]] = 1;
+
+    int is_first = 1;
+    int found = 0;
+    while (path->size > 0)
+    {
+        int current_cell[2];
+        q_pop(path, current_cell);
+
+        if (is_first)
+        {
+            is_first = 0;
+            goto push;
+        }
+
+        if (!(0 <= current_cell[0] && current_cell[0] < grid->rows) || !(0 <= current_cell[0] && current_cell[1] < grid->cols))
+            continue;
+        if (visited[current_cell[0]][current_cell[1]])
+            continue;
+        visited[current_cell[0]][current_cell[1]] = 1;
+
+        char cell = grid->grid[current_cell[0]][current_cell[1]];
+
+        if (cell == 'X')
+            continue;
+        else if (cell == 'L')
+        {
+            found = 1;
+            break;
+        }
+
+        push:
+        q_push(path, (int[2]){ current_cell[0] - 1, current_cell[1] });
+        q_push(path, (int[2]){ current_cell[0] + 1, current_cell[1] });
+        q_push(path, (int[2]){ current_cell[0], current_cell[1] - 1 });
+        q_push(path, (int[2]){ current_cell[0], current_cell[1] + 1 });
+    }
+
+    delete_queue(path);
+    for (int i = 0; i < grid->rows; i++)
+        free(visited[i]);
+    free(visited);
+    return found;
 }
