@@ -1,3 +1,19 @@
+// 3197: 백조의 호수
+/*
+ * 호수와 백조의 위치가 주어졌을 때, 백조가 만나는 일수를 구하여라.
+ */
+// https://www.acmicpc.net/problem/1655
+
+/*
+ * 일반적인 BFS를 이용한 방법으로 시간 초과.
+ * 빙하가 녹는 매 호수마다 백조의 경로를 계산하여 시간 증가.
+ * 진행 방향에 빙하가 있을 때만 다음 호수를 계산하는 최적화 시도 요함.
+ */
+// 메모리: - KB
+// 시간: 시간 초과 ms
+// 코드 길이: 7260 bytes
+// http://boj.kr/9c315ffd5c644d398ba5c43863feb42c
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -49,7 +65,7 @@ int main(void)
         for (int col = 0; col < cols; col++)
             grid->grid[row][col] = temp[col];
 
-        // free(temp);
+        free(temp);
     }
 
     int swan[2];
@@ -239,13 +255,6 @@ int can_they_meet(grid_t* grid, int swan[2])
         visited[i] = (int*)calloc(grid->cols, sizeof(int));
     visited[swan[0]][swan[1]] = 1;
 
-    // for (int i = 0; i < grid->rows; i++)
-    // {
-    //     for (int j = 0; j < grid->cols; j++)
-    //         printf("{%d}", visited[i][j]);
-    //     printf("\n");
-    // }
-
     int is_first = 1;
     int found = 0;
     while (path->size > 0)
@@ -260,7 +269,7 @@ int can_they_meet(grid_t* grid, int swan[2])
         }
 
         // 셀이 범위를 벗어나면 무시.
-        if (!(0 <= current_cell[0] && current_cell[0] < grid->rows) || !(0 <= current_cell[0] && current_cell[1] < grid->cols))
+        if (!(0 <= current_cell[0] && current_cell[0] < grid->rows) || !(0 <= current_cell[1] && current_cell[1] < grid->cols))
             continue;
 
         // 셀을 이미 방문했으면 무시.
@@ -286,8 +295,8 @@ int can_they_meet(grid_t* grid, int swan[2])
     }
 
     delete_queue(path);
-    // for (int i = 0; i < grid->rows; i++)
-    //     free(visited[i]);
+    for (int i = 0; i < grid->rows; i++)
+        free(visited[i]);
     free(visited);
     return found;
 }

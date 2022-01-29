@@ -1,3 +1,18 @@
+// 3197: 백조의 호수
+/*
+ * 호수와 백조의 위치가 주어졌을 때, 백조가 만나는 일수를 구하여라.
+ */
+// https://www.acmicpc.net/problem/1655
+
+/*
+ * grid를 value로 넘기면 메모리 초과, reference로 넘기면 시간 초과.
+ * 해시 테이블을 이용한 방법은 시간이 매우 오래 걸림.
+ */
+// 메모리: 메모리 초과 KB
+// 시간: 시간 초과 ms
+// 코드 길이: - bytes
+// http://boj.kr/9c315ffd5c644d398ba5c43863feb42c
+
 #include <iostream>
 #include <string>
 #include <vector>
